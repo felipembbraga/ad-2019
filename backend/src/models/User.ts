@@ -1,4 +1,5 @@
 import { Document, Model, Schema, model } from "mongoose";
+import emailValidator from "email-validator";
 
 export interface User extends Document {
     name: string;
@@ -20,6 +21,10 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+        validate: {
+            validator: (email: string) => emailValidator.validate(email),
+            message: (props) => `${props.value} is not a valid email.`
+        }
     },
     friend: {
         type: Schema.Types.ObjectId,
@@ -47,7 +52,7 @@ UserSchema.statics.draw = async function (this: UserModel) {
             notSortedUsers = notSortedUsers.filter((u) => u._id !== users[i]._id);
             continue;
         } 
-        
+
         // sorteia um
         const index = Math.floor(Math.random() * options.length);
         console.log(index, options);
