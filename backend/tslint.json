@@ -1,0 +1,36 @@
+{
+    "extends":"tslint:recommended",
+    "rules": {
+        "indent": [
+            true,
+            "spaces",
+            4
+        ],
+        "quotes": [
+            "warn",
+            "double"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-var": [
+            "error"
+        ],
+        "no-console": [
+            false
+        ],
+        "no-unused-vars": [
+            "warn"
+        ],
+        "no-mixed-spaces-and-tabs": [
+            "warn"
+        ],
+        "object-literal-sort-keys":false,
+        "variable-name":false,
+        "radix": false,
+        "trailing-comma":false,
+        "arrow-parens":false,
+        "object-literal-key-quotes":false
+    }
+}
