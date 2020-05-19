@@ -1,13 +1,13 @@
-import sender from "../config/email";
+import  {sendgridSender} from "../config/email";
 import { SendMailOptions } from "nodemailer";
 
 class EmailService {
-    sender = sender;
+    sender = sendgridSender;
     fromEmail = "Amigo secreto<felipe.mendes.braga@gmail.com>";
 
     sendEmail = (options: SendMailOptions) =>
         new Promise((resolve, reject) => {
-            sender.sendMail(options, (error: Error | null, info: any) => {
+            this.sender.sendMail(options, (error: Error | null, info: any) => {
                 if (error) {
                     return reject(error);
                 }

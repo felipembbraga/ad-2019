@@ -1,12 +1,12 @@
 import { Document, Model, Schema, model } from "mongoose";
 
 import emailValidator from "email-validator";
-// import emailService from "../services/EmailService";
+import emailService from "../services/EmailService";
 
 export interface User extends Document {
     name: string;
     email: string;
-    friend?: string;
+    friend?: string | User;
     notify(): Promise<any>;
 }
 
@@ -37,10 +37,13 @@ const UserSchema = new Schema({
 UserSchema.methods.notify = async function (this: User) {
     await this.populate({path: "friend", select: "name email"}).execPopulate();
     console.log(this);
+    if (!this.friend) {
+        return;
+    }
     try {
-        // await emailService.notifyFriend()
+        await emailService.notifyFriend(this.email, this.name, (this.friend as User).name);
     } catch (error) {
-        
+        console.log(error);
     }
 };
 

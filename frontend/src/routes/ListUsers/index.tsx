@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from "react";
 
-import { List, Container, Button, Icon, Confirm } from "semantic-ui-react";
+import {
+  List,
+  Container,
+  Button,
+  Icon,
+  Confirm,
+  Segment,
+  TransitionablePortal,
+  Header,
+} from "semantic-ui-react";
 import { api } from "../../api";
 import { useHistory } from "react-router";
 
@@ -14,8 +23,9 @@ interface User {
 const ListUsers: React.FC = () => {
   const history = useHistory();
   const [users, setUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [openShowFriend, setOpenShowFriend] = useState(false);
 
   const fetchData = async () => {
     const response = await api.get("/v1/users");
@@ -39,6 +49,15 @@ const ListUsers: React.FC = () => {
     } catch (error) {}
   };
 
+  const handleShowFriend = (user: User) => () => {
+    setSelectedUser(user);
+    setOpenShowFriend(true);
+  };
+
+  const handleCloseShowFriend = () => {
+    setSelectedUser(null);
+    setOpenShowFriend(false);
+  };
   const handleEdit = (id: string) => () => {
     history.push(`/users/${id}/edit`);
   };
@@ -48,18 +67,19 @@ const ListUsers: React.FC = () => {
     setOpenConfirm(true);
   };
 
-  const closeCancelDelete = () => setOpenConfirm(false);
+  const closeCancelDelete = () => {
+    setSelectedUser(null);
+    setOpenConfirm(false);
+  };
 
   const closeConfirmDelete = async () => {
     try {
-      const user = selectedUser as any;
-      await api.delete(`/v1/users/${user._id}`);
-      setUsers(users.filter((u: User) => u._id !== user._id));
+      const user = selectedUser;
+      await api.delete(`/v1/users/${user?._id}`);
+      setUsers(users.filter((u: User) => u._id !== user?._id));
     } catch (error) {
       alert("Erro ao deletar usuário.");
     } finally {
-      setSelectedUser(null);
-      setOpenConfirm(false);
     }
   };
 
@@ -80,10 +100,31 @@ const ListUsers: React.FC = () => {
                 {user.email}
               </List.Content>
               <List.Content floated="right">
+                
                 {user.friend ? (
-                  <Button icon>
-                    <Icon name="eye" />
-                  </Button>
+                  <TransitionablePortal
+                  closeOnTriggerClick
+                  onOpen={handleShowFriend(user)}
+                  onClose={handleCloseShowFriend}
+                  openOnTriggerClick
+                  trigger={
+                    <Button icon color="instagram">
+                      <Icon name="eye" />
+                    </Button>
+                  }
+                >
+                  <Segment
+                    style={{
+                      left: "40%",
+                      position: "fixed",
+                      top: "50%",
+                      zIndex: 1000,
+                    }}
+                  >
+                    <Header>O amigo secreto de {user.name} é...</Header>
+                    <p>{user.friend?.name}</p>
+                  </Segment>
+                </TransitionablePortal>
                 ) : null}
                 <Button icon onClick={handleEdit(user._id)}>
                   <Icon name="edit" />

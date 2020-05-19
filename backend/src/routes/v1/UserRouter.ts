@@ -16,6 +16,34 @@ class UserRouter extends ModelRouter<UserInterface> {
         this.router.delete("/:id", this.delete);
     }
 
+    findAll = (req: Request, res: Response, next: NextFunction) => {
+        const { page, ...queryDocument } = req.query;
+        let currentPage = page ? parseInt(page.toString()) : 1;
+        currentPage = currentPage > 0 ? currentPage : 1;
+
+        const skip = (currentPage - 1) * this.pageSize;
+
+        this.model
+            .countDocuments(queryDocument as any)
+            .exec()
+            .then((count: number) =>
+                this.model
+                    .find(queryDocument as any)
+                    .populate("friend")
+                    .skip(skip)
+                    .limit(this.pageSize)
+                    .then(
+                        this.renderAll(res, next, {
+                            page,
+                            count,
+                            pageSize: this.pageSize,
+                            url: req.url,
+                        })
+                    )
+            )
+            .catch(next);
+    };
+
     draw = async (_req: Request, res: Response, next: NextFunction) => {
         try {
             const response = await User.draw();
