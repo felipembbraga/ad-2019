@@ -11,7 +11,7 @@ interface User {
   friend: any;
 }
 
-const ListUsers: React.FC = (props) => {
+const ListUsers: React.FC = () => {
   const history = useHistory();
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);

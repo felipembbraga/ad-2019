@@ -3,7 +3,7 @@ import { SendMailOptions } from "nodemailer";
 
 class EmailService {
     sender = sender;
-    fromEmail = "Mailgun Sandbox <postmaster@sandbox70be6f51a84e4d84abd568585e480a3a.mailgun.org>";
+    fromEmail = "Amigo secreto<felipe.mendes.braga@gmail.com>";
 
     sendEmail = (options: SendMailOptions) =>
         new Promise((resolve, reject) => {
