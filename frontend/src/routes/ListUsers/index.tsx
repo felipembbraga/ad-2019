@@ -108,7 +108,7 @@ const ListUsers: React.FC = () => {
                   onClose={handleCloseShowFriend}
                   openOnTriggerClick
                   trigger={
-                    <Button icon color="instagram">
+                    <Button icon color={(openShowFriend) && selectedUser?._id === user._id ? "grey" : "instagram"}>
                       <Icon name="eye" />
                     </Button>
                   }
