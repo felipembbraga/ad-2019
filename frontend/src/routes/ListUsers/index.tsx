@@ -16,7 +16,7 @@ const ListUsers: React.FC = (props) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [openConfirm, setOpenConfirm] = useState(false);
-  
+
   const fetchData = async () => {
     const response = await api.get("/v1/users");
     console.log(response.data.items);
@@ -24,7 +24,6 @@ const ListUsers: React.FC = (props) => {
   };
 
   useEffect(() => {
-    
     fetchData();
   }, []);
 
@@ -32,15 +31,13 @@ const ListUsers: React.FC = (props) => {
     history.push("/new-user");
   };
 
-  const  handleDrawClick = async () => {
+  const handleDrawClick = async () => {
     try {
-        const response: any = await api.get("/v1/users/draw");
-        console.log(response.data.data);
-        setUsers(response.data.data);
-    } catch (error) {
-        
-    }
-  }
+      const response: any = await api.get("/v1/users/draw");
+      console.log(response.data.data);
+      setUsers(response.data.data);
+    } catch (error) {}
+  };
 
   const handleEdit = (id: string) => () => {
     history.push(`/users/${id}/edit`);
@@ -50,17 +47,19 @@ const ListUsers: React.FC = (props) => {
     setSelectedUser(user as any);
     setOpenConfirm(true);
   };
+
   const closeCancelDelete = () => setOpenConfirm(false);
+
   const closeConfirmDelete = async () => {
     try {
-        const user = (selectedUser as any);
-        await api.delete(`/v1/users/${user._id}`);
-        setUsers(users.filter((u: User) => u._id !== user._id))
+      const user = selectedUser as any;
+      await api.delete(`/v1/users/${user._id}`);
+      setUsers(users.filter((u: User) => u._id !== user._id));
     } catch (error) {
-        alert("Erro ao deletar usuário.");
+      alert("Erro ao deletar usuário.");
     } finally {
-        setSelectedUser(null);
-        setOpenConfirm(false);
+      setSelectedUser(null);
+      setOpenConfirm(false);
     }
   };
 
@@ -81,27 +80,30 @@ const ListUsers: React.FC = (props) => {
                 {user.email}
               </List.Content>
               <List.Content floated="right">
-                {user.friend ? (<Button  icon onClick={handleEdit(user._id)}>
-                  <Icon name="eye" />
-                </Button>) : null}
-                <Button icon>
+                {user.friend ? (
+                  <Button icon>
+                    <Icon name="eye" />
+                  </Button>
+                ) : null}
+                <Button icon onClick={handleEdit(user._id)}>
                   <Icon name="edit" />
                 </Button>
                 <Button color="red" icon onClick={handleDelete(user)}>
                   <Icon name="delete" />
                 </Button>
-                
               </List.Content>
             </List.Item>
           ))}
         </List>
-        
+
         <Confirm
-                    open={openConfirm}
-                    content={`Deseja remover o usuário ${selectedUser ? (selectedUser as any).name : ""}?`}
-                    onCancel={closeCancelDelete}
-                    onConfirm={closeConfirmDelete}
-                    />
+          open={openConfirm}
+          content={`Deseja remover o usuário ${
+            selectedUser ? (selectedUser as any).name : ""
+          }?`}
+          onCancel={closeCancelDelete}
+          onConfirm={closeConfirmDelete}
+        />
       </Container>
     </div>
   );
