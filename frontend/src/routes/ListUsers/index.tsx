@@ -80,6 +80,8 @@ const ListUsers: React.FC = () => {
     } catch (error) {
       alert("Erro ao deletar usuário.");
     } finally {
+        setSelectedUser(null);
+        setOpenConfirm(false);
     }
   };
 

@@ -1,14 +1,7 @@
 import nodemailer from "nodemailer";
-import mg from "nodemailer-mailgun-transport";
 import sg from "nodemailer-sendgrid-transport";
 import environment from "./environment";
 
-const auth = {
-    auth: {
-        api_key: environment.email.mailgun.apiKey,
-        domain: environment.email.mailgun.domain,
-    },
-};
 
 const options = {
     auth: {
@@ -17,6 +10,5 @@ const options = {
     },
 };
 export const sendgridSender = nodemailer.createTransport(sg(options));
-const sender = nodemailer.createTransport(mg(auth));
 
-export default sender;
+export default sendgridSender;

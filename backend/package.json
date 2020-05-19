@@ -45,7 +45,7 @@
         "debug": "nodemon --inspect --watch \"src/\" --exec \"ts-node src/index.ts\" -e ts",
         "test": "jest",
         "build": "tsc",
-        "start": "ts-node ./src/index.ts"
+        "start": "node ./dist/src/index.js"
     },
     "jest": {
         "verbose": true,
