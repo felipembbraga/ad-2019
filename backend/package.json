@@ -10,7 +10,7 @@
         "email-validator": "^2.0.4",
         "express": "^4.17.1",
         "mongoose": "^5.9.14",
-        "nodemailer": "^6.4.6",
+        "nodemailer": "^6.4.16",
         "nodemailer-mailgun-transport": "^2.0.0",
         "nodemailer-sendgrid-transport": "^0.2.0",
         "pino": "^6.2.1",
